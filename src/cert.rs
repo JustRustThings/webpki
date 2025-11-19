@@ -313,6 +313,11 @@ fn remember_cert_extension<'a>(
             // id-ce-cRLDistributionPoints 2.5.29.31
             31 => &mut cert.crl_distribution_points,
 
+            // id-ce-certificatePolicies 2.5.29.32
+            // We ignore it, behaving as if the user had passed a wildcard
+            // required policy.
+            32 => return Ok(()),
+
             // id-ce-extKeyUsage 2.5.29.37
             37 => &mut cert.eku,
 

@@ -14,7 +14,7 @@
 
 #[cfg(feature = "alloc")]
 use pki_types::SubjectPublicKeyInfoDer;
-use pki_types::{CertificateDer, DnsName};
+use pki_types::{CertificateDer, DnsName, UnixTime};
 
 use crate::der::{self, CONSTRUCTED, CONTEXT_SPECIFIC, DerIterator, FromDer, Tag};
 use crate::error::{DerTypeId, Error};
@@ -168,6 +168,15 @@ impl<'a> Cert<'a> {
                     }
                 }
             }
+        })
+    }
+
+    /// Returns the not_before validity date from the certificate.
+    pub fn not_before(&self) -> Result<UnixTime, Error> {
+        self.validity.read_all(Error::BadDer, |input| {
+            let not_before = UnixTime::from_der(input)?;
+            let _not_after = UnixTime::from_der(input)?;
+            Ok(not_before)
         })
     }
 

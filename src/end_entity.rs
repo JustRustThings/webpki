@@ -120,6 +120,11 @@ impl EndEntityCert<'_> {
         .build_chain(self, time, verify_path)
     }
 
+    /// Returns the not_before validity date from the certificate.
+    pub fn not_before(&self) -> Result<UnixTime, Error> {
+        self.inner.not_before()
+    }
+
     /// Verifies that the certificate is valid for the given Subject Name.
     pub fn verify_is_valid_for_subject_name(
         &self,
